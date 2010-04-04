@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.ant.core.antRunner"
+            name="Greetings">
+         <property
+               name="appName"
+               value="Greetings">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="tutorialProduct"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.ant.core.antRunner"
+            name="Eclipse">
+         <property
+               name="windowImages"
+               value="eclipse.png,eclipse32.png,eclipse48.png">
+         </property>
+         <property
+               name="aboutText"
+               value="Eclipse for RCP/Plug-in Developers&#x0A;&#x0A;Build id: {0}&#x0A;&#x0A;(c) Copyright Eclipse contributors and others 2000, 2009.  All rights reserved.&#x0A;Visit http://eclipse.org/&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://apache.org/">
+         </property>
+         <property
+               name="aboutImage"
+               value="eclipse_lg.gif">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="5,275,445,15">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="tutorial1Product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.ant.core.antRunner"
+            name="GreetingProduct">
+         <property
+               name="appName"
+               value="GreetingProduct">
+         </property>
+      </product>
+   </extension>
+
+</plugin>
