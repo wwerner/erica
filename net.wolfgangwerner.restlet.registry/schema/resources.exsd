@@ -3,10 +3,10 @@
 <schema targetNamespace="net.wolfgangwerner.restlet.registry" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="net.wolfgangwerner.restlet.registry" id="components" name="Restlet Components"/>
+         <meta.schema plugin="net.wolfgangwerner.restlet.registry" id="resources" name="Restlet Resources"/>
       </appinfo>
       <documentation>
-         Contribute all Restlet Components to this extension point. All components will be started automatically when the bundle is activated and stopped when the registry bundle is deactivated.
+         All Restlet Resources to be attached to Restlets need to be contributed to this extension point.
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="component"/>
+            <element ref="resource"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,16 +47,8 @@
       </complexType>
    </element>
 
-   <element name="component">
-      <annotation>
-         <documentation>
-            A single Restlet component. Corresponds to org.restlet.Component.
-         </documentation>
-      </annotation>
+   <element name="resource">
       <complexType>
-         <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="server"/>
-         </sequence>
          <attribute name="id" type="string">
             <annotation>
                <documentation>
@@ -71,58 +63,13 @@
                </documentation>
             </annotation>
          </attribute>
-      </complexType>
-   </element>
-
-   <element name="server">
-      <annotation>
-         <documentation>
-            A Restlet server (org.restlet.Server). For each contribution, an instance will be created using the &quot;Server(Protocol protocol, String address)&quot; constructor. 
-
-The protocol will be constructed using the value specified in the &apos;protocol&apos; attribute as scheme name and the port if specified.
-         </documentation>
-      </annotation>
-      <complexType>
-         <attribute name="name" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="protocol" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="port" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-      </complexType>
-   </element>
-
-   <element name="resourceReference">
-      <complexType>
-         <attribute name="urlTemplate" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="resourceId" type="string">
+         <attribute name="class" type="string">
             <annotation>
                <documentation>
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="identifier" basedOn="net.wolfgangwerner.restlet.registry.resources/resource/@name"/>
+                  <meta.attribute kind="java" basedOn=":org.restlet.resource.ServerResource"/>
                </appinfo>
             </annotation>
          </attribute>
