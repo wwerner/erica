@@ -55,7 +55,10 @@
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="server"/>
+            <choice>
+               <element ref="server"/>
+               <element ref="resourceReference"/>
+            </choice>
          </sequence>
          <attribute name="id" type="string">
             <annotation>
