@@ -18,6 +18,10 @@ public class RestletRegistry {
 	private List<Component> components = new ArrayList<Component>();
 	private Map<String, Class<ServerResource>> resources = new HashMap<String, Class<ServerResource>>();
 
+	public List<Component> getComponents() {
+		return components;
+	}
+
 	public void readExtensionRegistry() throws InvalidRegistryObjectException,
 			ClassNotFoundException, CoreException {
 		readResources();
@@ -62,9 +66,10 @@ public class RestletRegistry {
 				.getChildren("resourceReference")) {
 			currentComponent.getDefaultHost().attach(
 					resourceRef.getAttribute("urlTemplate"),
-					resources.get(resourceRef.getAttribute("id")));
+					resources.get(resourceRef.getAttribute("resourceId")));
 		}
 	}
+
 
 	private void addServers(Component currentComponent,
 			IConfigurationElement configElement) {

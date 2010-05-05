@@ -25,7 +25,7 @@
                protocol="http">
          </server>
          <resourceReference
-               resourceId="Greeting Resource"
+               resourceId="net.wolfgangwerner.tutorial1.Greeting.1"
                urlTemplate="/greet">
          </resourceReference>
       </component>
@@ -41,30 +41,6 @@
             class="net.wolfgangwerner.tutorial.restlet.GreetingListResource"
             id="net.wolfgangwerner.tutorial1.GreetingList.1"
             name="Greeting List Resource">
-      </resource>
-   </extension>
-   <extension
-         point="net.wolfgangwerner.restlet.registry.components">
-      <component
-            id="net.wolfgangwerner.tutorial1.component.1">
-         <server
-               name="HTTP"
-               port="80"
-               protocol="http">
-         </server>
-         <server
-               name="HTTP alternate"
-               port="8080"
-               protocol="http">
-         </server>
-      </component>
-   </extension>
-   <extension
-         point="net.wolfgangwerner.restlet.registry.resources">
-      <resource
-            class="net.wolfgangwerner.tutorial.restlet.GreetingResource"
-            id="net.wolfgangwerner.tutorial1.Greeting.1"
-            name="Greeting Resource">
       </resource>
    </extension>
 

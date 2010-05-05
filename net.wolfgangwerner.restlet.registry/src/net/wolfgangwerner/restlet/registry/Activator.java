@@ -2,25 +2,25 @@ package net.wolfgangwerner.restlet.registry;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.restlet.Component;
 
 public class Activator implements BundleActivator {
-
 	public static final String PLUGIN_ID = "net.wolfgangwerner.restlet.registry";
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
+
+	private RestletRegistry registry;
+
 	public void start(BundleContext context) throws Exception {
-		RestletRegistry registry =  new RestletRegistry();
+		registry = new RestletRegistry();
 		registry.readExtensionRegistry();
-		
+		for (Component component : registry.getComponents()) {
+			component.start();
+		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
+		for (Component component : registry.getComponents()) {
+			component.stop();
+		}
 	}
 
 }
