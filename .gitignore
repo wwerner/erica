@@ -1,3 +1,5 @@
 .metadata
 bin
 
+org.eclipse.ui.ide/
+sandbox/

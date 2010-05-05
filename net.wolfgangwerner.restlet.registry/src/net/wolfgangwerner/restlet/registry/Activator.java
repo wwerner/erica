@@ -5,11 +5,15 @@ import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
 
+	public static final String PLUGIN_ID = "net.wolfgangwerner.restlet.registry";
 	/*
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
+		RestletRegistry registry =  new RestletRegistry();
+		registry.readExtensionRegistry();
+		
 	}
 
 	/*
