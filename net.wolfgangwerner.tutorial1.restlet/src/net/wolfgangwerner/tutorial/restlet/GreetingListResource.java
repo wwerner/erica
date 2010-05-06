@@ -19,7 +19,7 @@ public class GreetingListResource extends ServerResource {
 		return GreetingStorage.getInstance().getGreetings().toString();
 	}
 
-	@Put
+	@Post
 	public void set(Representation entity) {
 		String key = getMnemonic();
 		
