@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="net.wolfgangwerner.restlet.registry" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="net.wolfgangwerner.restlet.registry" id="" name="Restlet Target References / Routes"/>
+      </appinfo>
+      <documentation>
+         This schena does not provide an extension point; it only defines the route element included in the other extension points
+      </documentation>
+   </annotation>
+
+   <element name="route">
+      <complexType>
+         <attribute name="urlTemplate" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="targetId" type="string">
+            <annotation>
+               <documentation>
+                  The target ID can be the ID of either a resource or a restlet contribution. 
+In detail, the supported elemets are:
+* Applications
+* Routers
+* Resources
+* Components
+* Filter
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+
+
+
+
+
+</schema>
