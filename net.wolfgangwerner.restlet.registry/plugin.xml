@@ -3,5 +3,66 @@
 <plugin>
    <extension-point id="resources" name="Restlet Resources" schema="schema/resources.exsd"/>
    <extension-point id="components" name="Restlet Components" schema="schema/components.exsd"/>
+   <extension-point id="applications" name="Restlet Applications" schema="schema/applications.exsd"/>
+   <extension-point id="routers" name="Restlet Routers" schema="schema/routers.exsd"/>
+   <extension-point id="filters" name="Restlet Filters" schema="schema/filters.exsd"/>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.routers">
+      <router>
+         <route></route>
+         <route
+               targetId="adfadf"
+               urlTemplate="adfad">
+         </route>
+      </router>
+   </extension>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.filters">
+      <filter
+            class="net.wolfgangwerner.restlet.registry.Filter:2"
+            id="net.wolfgangwerner.restlet.registry.filter2"
+            next="net.wolfgangwerner.restlet.registry.filter2">
+      </filter>
+      <filter
+            class="net.wolfgangwerner.restlet.registry.Filter:3"
+            id="net.wolfgangwerner.restlet.registry.filter3"
+            next="net.wolfgangwerner.restlet.registry.filter3">
+      </filter>
+   </extension>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.applications">
+      <application
+            id="net.wolfgangwerner.restlet.registry.application1">
+         <route></route>
+      </application>
+   </extension>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.routers">
+      <router>
+         <route></route>
+      </router>
+   </extension>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.filters">
+      <filter
+            class="net.wolfgangwerner.restlet.registry.Filter:2"
+            id="net.wolfgangwerner.restlet.registry.filter2"
+            next="net.wolfgangwerner.restlet.registry.filter2">
+      </filter>
+   </extension>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.resources">
+      <resource
+            id="1"
+            name="a">
+      </resource>
+   </extension>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.components">
+      <component>
+         <route></route>
+         <server></server>
+      </component>
+   </extension>
 
 </plugin>
