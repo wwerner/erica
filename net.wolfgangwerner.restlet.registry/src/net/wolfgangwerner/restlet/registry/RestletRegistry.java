@@ -1,12 +1,13 @@
 package net.wolfgangwerner.restlet.registry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.wolfgangwerner.restlet.model.ApplicationProxy;
 import net.wolfgangwerner.restlet.model.ComponentProxy;
-import net.wolfgangwerner.restlet.model.FilterProxy;
-import net.wolfgangwerner.restlet.model.RestletProxy;
+import net.wolfgangwerner.restlet.model.IdentifyableRestletProxy;
 import net.wolfgangwerner.restlet.model.RouterProxy;
 
 import org.eclipse.core.runtime.CoreException;
@@ -14,29 +15,40 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
+import org.restlet.Component;
+import org.restlet.Restlet;
 import org.restlet.resource.ServerResource;
 
 public class RestletRegistry {
+
+	static RestletRegistry instance = new RestletRegistry();
+
 	private Map<String, ComponentProxy> components = new HashMap<String, ComponentProxy>();
 	private Map<String, Class<ServerResource>> resources = new HashMap<String, Class<ServerResource>>();
 	private Map<String, ApplicationProxy> applications = new HashMap<String, ApplicationProxy>();
 	private Map<String, RouterProxy> routers = new HashMap<String, RouterProxy>();
-	private Map<String, FilterProxy> filters = new HashMap<String, FilterProxy>();
-	private Map<String, RestletProxy> allRestlets = new HashMap<String, RestletProxy>();
+	private Map<String, IdentifyableRestletProxy> allRestlets = new HashMap<String, IdentifyableRestletProxy>();
+
+	private RestletRegistry() {
+		super();
+	}
+
+	public static RestletRegistry getInstance() {
+		return instance;
+	}
 
 	public void readExtensionRegistry() throws InvalidRegistryObjectException,
 			ClassNotFoundException, CoreException {
+		// TODO Build a generic registry. This is grossly redundant.
+
 		readResources();
 		readComponents();
 		readApplications();
 		readRouters();
-		readFilters();
 
 		allRestlets.putAll(components);
 		allRestlets.putAll(applications);
 		allRestlets.putAll(routers);
-		allRestlets.putAll(filters);
-
 	}
 
 	private void readApplications() throws CoreException {
@@ -61,19 +73,8 @@ public class RestletRegistry {
 		}
 	}
 
-	private void readFilters() throws CoreException {
-		IConfigurationElement[] applicationContributions = Platform
-				.getExtensionRegistry().getConfigurationElementsFor(
-						Activator.PLUGIN_ID, "filters");
-
-		for (IConfigurationElement configElement : applicationContributions) {
-			FilterProxy proxy = new FilterProxy(configElement);
-			filters.put(proxy.getId(), proxy);
-		}
-	}
-
 	@SuppressWarnings("unchecked")
-	public void readResources() throws InvalidRegistryObjectException,
+	private void readResources() throws InvalidRegistryObjectException,
 			ClassNotFoundException, CoreException {
 		IConfigurationElement[] contributions = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(Activator.PLUGIN_ID, "resources");
@@ -88,10 +89,9 @@ public class RestletRegistry {
 
 			resources.put(contribution.getAttribute("id"), resourceClass);
 		}
-
 	}
 
-	public void readComponents() {
+	private void readComponents() {
 		IConfigurationElement[] componentContributions = Platform
 				.getExtensionRegistry().getConfigurationElementsFor(
 						Activator.PLUGIN_ID, "components");
@@ -100,5 +100,25 @@ public class RestletRegistry {
 			ComponentProxy proxy = new ComponentProxy(configElement);
 			components.put(proxy.getId(), proxy);
 		}
+	}
+
+	public boolean isRestletId(String restletId) {
+		return allRestlets.containsKey(restletId);
+	}
+
+	public Restlet getRestlet(String restletId) {
+		return allRestlets.get(restletId).getRestlet();
+	}
+
+	public Class<ServerResource> getResource(String resourceId) {
+		return resources.get(resourceId);
+	}
+
+	public List<Component> getComponents() {
+		List<Component> result = new ArrayList<Component>();
+		for (ComponentProxy proxy : components.values()) {
+			result.add((Component) proxy.getRestlet());
+		}
+		return result;
 	}
 }

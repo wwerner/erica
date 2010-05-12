@@ -10,7 +10,7 @@ public class Activator implements BundleActivator {
 	private RestletRegistry registry;
 
 	public void start(BundleContext context) throws Exception {
-		registry = new RestletRegistry();
+		registry = RestletRegistry.getInstance();
 		registry.readExtensionRegistry();
 		for (Component component : registry.getComponents()) {
 			component.start();

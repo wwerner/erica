@@ -1,20 +1,39 @@
 package net.wolfgangwerner.restlet.model;
 
-import org.eclipse.core.runtime.IConfigurationElement;
+import net.wolfgangwerner.restlet.registry.RestletRegistry;
 
-public class ApplicationProxy extends RestletProxy {
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.restlet.Application;
+import org.restlet.Restlet;
+
+public class ApplicationProxy extends IdentifyableRestletProxy {
 	private String name;
-	private String className;
+	private Application application;
 	private String outboundRootReference;
 
-	public ApplicationProxy(IConfigurationElement configElement) {
+	public ApplicationProxy(IConfigurationElement configElement)
+			throws CoreException {
 		super(configElement);
-		id = configElement.getAttribute("id");
 		name = configElement.getAttribute("name");
-		className = configElement.getAttribute("class");
+		if (configElement.getAttribute("class") != null) {
+			application = (Application) configElement
+					.createExecutableExtension("class");
+		}
 		outboundRootReference = configElement
 				.getAttribute("outboundRootReference");
 
+	}
+
+	@Override
+	public Restlet getRestlet() {
+		if (application != null)
+			application = new Application();
+
+		application.setOutboundRoot(RestletRegistry.getInstance().getRestlet(
+				outboundRootReference));
+		
+		return application;
 	}
 
 	public String getId() {
@@ -23,10 +42,6 @@ public class ApplicationProxy extends RestletProxy {
 
 	public String getName() {
 		return name;
-	}
-
-	public String getClassName() {
-		return className;
 	}
 
 	public String getOutboundRootReference() {

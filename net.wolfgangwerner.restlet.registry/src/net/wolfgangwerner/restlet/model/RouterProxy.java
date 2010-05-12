@@ -1,12 +1,17 @@
 package net.wolfgangwerner.restlet.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IConfigurationElement;
+import net.wolfgangwerner.restlet.registry.RestletRegistry;
 
-public class RouterProxy extends RestletProxy {
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.restlet.Restlet;
+import org.restlet.routing.Router;
+
+public class RouterProxy extends IdentifyableRestletProxy {
 	private String name;
-	private List<RouteProxy> routes;
+	private List<RouteProxy> routes = new ArrayList<RouteProxy>();
 
 	public RouterProxy(IConfigurationElement configElement) {
 		super(configElement);
@@ -17,6 +22,22 @@ public class RouterProxy extends RestletProxy {
 				.getChildren("route")) {
 			routes.add(new RouteProxy(routeConfig));
 		}
+	}
+	
+	@Override
+	public Restlet getRestlet() {
+		Router router = new Router();
+
+		for (RouteProxy route : routes) {
+			if (RestletRegistry.getInstance().isRestletId(route.getTargetId()))
+				router.attach(route.getUrlTemplate(), RestletRegistry
+						.getInstance().getRestlet(route.getTargetId()));
+			else
+				router.attach(route.getUrlTemplate(), RestletRegistry
+						.getInstance().getResource(route.getTargetId()));
+		}
+		
+		return router;
 	}
 
 	public String getId() {

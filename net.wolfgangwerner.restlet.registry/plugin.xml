@@ -5,6 +5,5 @@
    <extension-point id="components" name="Restlet Components" schema="schema/components.exsd"/>
    <extension-point id="applications" name="Restlet Applications" schema="schema/applications.exsd"/>
    <extension-point id="routers" name="Restlet Routers" schema="schema/routers.exsd"/>
-   <extension-point id="filters" name="Restlet Filters" schema="schema/filters.exsd"/>
 
 </plugin>

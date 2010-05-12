@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.components">
+      <component
+            id="c.1"
+            name="component 1">
+         <server
+               id="net.wolfgangwerner.restlet.registry.example.server1"
+               name="http"
+               port="8080"
+               protocol="http">
+         </server>
+      </component>
+   </extension>
+
+</plugin>
