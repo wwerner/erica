@@ -52,7 +52,7 @@
    <element name="router">
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="route"/>
+            <element ref="route" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="id" type="string">
             <annotation>

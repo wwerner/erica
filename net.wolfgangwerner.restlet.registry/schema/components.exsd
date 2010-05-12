@@ -88,6 +88,13 @@ The protocol will be constructed using the value specified in the &apos;protocol
          </documentation>
       </annotation>
       <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="name" type="string">
             <annotation>
                <documentation>

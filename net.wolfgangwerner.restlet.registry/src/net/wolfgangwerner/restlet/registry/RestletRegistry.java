@@ -1,33 +1,78 @@
 package net.wolfgangwerner.restlet.registry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import net.wolfgangwerner.restlet.model.ApplicationProxy;
+import net.wolfgangwerner.restlet.model.ComponentProxy;
+import net.wolfgangwerner.restlet.model.FilterProxy;
+import net.wolfgangwerner.restlet.model.RestletProxy;
+import net.wolfgangwerner.restlet.model.RouterProxy;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
-import org.restlet.Component;
-import org.restlet.data.Protocol;
 import org.restlet.resource.ServerResource;
 
 public class RestletRegistry {
-	private List<Component> components = new ArrayList<Component>();
+	private Map<String, ComponentProxy> components = new HashMap<String, ComponentProxy>();
 	private Map<String, Class<ServerResource>> resources = new HashMap<String, Class<ServerResource>>();
-
-	public List<Component> getComponents() {
-		return components;
-	}
+	private Map<String, ApplicationProxy> applications = new HashMap<String, ApplicationProxy>();
+	private Map<String, RouterProxy> routers = new HashMap<String, RouterProxy>();
+	private Map<String, FilterProxy> filters = new HashMap<String, FilterProxy>();
+	private Map<String, RestletProxy> allRestlets = new HashMap<String, RestletProxy>();
 
 	public void readExtensionRegistry() throws InvalidRegistryObjectException,
 			ClassNotFoundException, CoreException {
 		readResources();
 		readComponents();
+		readApplications();
+		readRouters();
+		readFilters();
+
+		allRestlets.putAll(components);
+		allRestlets.putAll(applications);
+		allRestlets.putAll(routers);
+		allRestlets.putAll(filters);
+
 	}
 
+	private void readApplications() throws CoreException {
+		IConfigurationElement[] applicationContributions = Platform
+				.getExtensionRegistry().getConfigurationElementsFor(
+						Activator.PLUGIN_ID, "applications");
+
+		for (IConfigurationElement configElement : applicationContributions) {
+			ApplicationProxy proxy = new ApplicationProxy(configElement);
+			applications.put(proxy.getId(), proxy);
+		}
+	}
+
+	private void readRouters() throws CoreException {
+		IConfigurationElement[] applicationContributions = Platform
+				.getExtensionRegistry().getConfigurationElementsFor(
+						Activator.PLUGIN_ID, "routers");
+
+		for (IConfigurationElement configElement : applicationContributions) {
+			RouterProxy proxy = new RouterProxy(configElement);
+			routers.put(proxy.getId(), proxy);
+		}
+	}
+
+	private void readFilters() throws CoreException {
+		IConfigurationElement[] applicationContributions = Platform
+				.getExtensionRegistry().getConfigurationElementsFor(
+						Activator.PLUGIN_ID, "filters");
+
+		for (IConfigurationElement configElement : applicationContributions) {
+			FilterProxy proxy = new FilterProxy(configElement);
+			filters.put(proxy.getId(), proxy);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public void readResources() throws InvalidRegistryObjectException,
 			ClassNotFoundException, CoreException {
 		IConfigurationElement[] contributions = Platform.getExtensionRegistry()
@@ -51,34 +96,9 @@ public class RestletRegistry {
 				.getExtensionRegistry().getConfigurationElementsFor(
 						Activator.PLUGIN_ID, "components");
 
-		Component component;
 		for (IConfigurationElement configElement : componentContributions) {
-			component = new Component();
-			addServers(component, configElement);
-			addResources(component, configElement);
-			components.add(component);
-		}
-	}
-
-	private void addResources(Component currentComponent,
-			IConfigurationElement configElement) {
-		for (IConfigurationElement resourceRef : configElement
-				.getChildren("resourceReference")) {
-			currentComponent.getDefaultHost().attach(
-					resourceRef.getAttribute("urlTemplate"),
-					resources.get(resourceRef.getAttribute("resourceId")));
-		}
-	}
-
-
-	private void addServers(Component currentComponent,
-			IConfigurationElement configElement) {
-		for (IConfigurationElement serverConfig : configElement
-				.getChildren("server")) {
-			Protocol protocol = Protocol.valueOf(serverConfig
-					.getAttribute("protocol"));
-			currentComponent.getServers().add(protocol,
-					Integer.valueOf(serverConfig.getAttribute("port")));
+			ComponentProxy proxy = new ComponentProxy(configElement);
+			components.put(proxy.getId(), proxy);
 		}
 	}
 }

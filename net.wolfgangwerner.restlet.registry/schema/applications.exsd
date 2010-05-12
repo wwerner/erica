@@ -56,9 +56,6 @@
          </documentation>
       </annotation>
       <complexType>
-         <sequence>
-            <element ref="route"/>
-         </sequence>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
@@ -80,6 +77,16 @@
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn="org.restlet.Application:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="outboundRoot" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier"/>
                </appinfo>
             </annotation>
          </attribute>
