@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.components">
+      <component
+            id="c.1"
+            name="Component 1">
+         <server
+               id="server.1"
+               name="HTTP"
+               port="80"
+               protocol="http">
+         </server>
+         <server
+               id="server.2"
+               name="Alternate HTTP"
+               port="8080"
+               protocol="HTTP">
+         </server>
+         <route
+               targetId="r.1"
+               urlTemplate="/">
+         </route>
+      </component>
+   </extension>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.resources">
+      <resource
+            class="net.wolfgangwerner.restlet.registry.test.resources.Root"
+            id="r.1"
+            name="Resource 1">
+      </resource>
+   </extension>
+</plugin>
