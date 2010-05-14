@@ -10,26 +10,26 @@ import java.net.URLConnection;
 
 import org.junit.Test;
 
-public class ComponentTest {
+public class RouterTest {
 	@Test
-	public void testHttpServer() throws IOException {
-		URLConnection conn = new URL("http://localhost:80/resource1").openConnection();
+	public void testFirstRoute() throws IOException {
+		URLConnection conn = new URL("http://localhost:80/a/1/test1").openConnection();
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn
 				.getInputStream()));
 		String result = in.readLine();
 		
-		assertEquals("resource 1", result);
+		assertEquals("passed test1", result);
 	}
 
 	@Test
-	public void testAlternateHttpServer() throws IOException {
-		URLConnection conn = new URL("http://localhost:8080/resource1").openConnection();
+	public void testSecondRoute() throws IOException {
+		URLConnection conn = new URL("http://localhost:80/a/2/test2").openConnection();
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn
 				.getInputStream()));
 		String result = in.readLine();
 		
-		assertEquals("resource 1", result);
+		assertEquals("passed test2", result);
 	}
 }
