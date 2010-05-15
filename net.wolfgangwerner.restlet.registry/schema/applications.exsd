@@ -53,6 +53,7 @@
       <annotation>
          <documentation>
             The attached route will be used as outbound root for the contributed application.
+You can define either a class implementing your application or a restlet or resource id to be used as inbound root.
          </documentation>
       </annotation>
       <complexType>
@@ -83,7 +84,7 @@
          <attribute name="inboundRoot" type="string">
             <annotation>
                <documentation>
-                  
+                  The restlet or resource id to be used as inbound root. Will be ignored if the class is set.
                </documentation>
                <appinfo>
                   <meta.attribute kind="identifier"/>
