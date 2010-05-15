@@ -8,4 +8,4 @@ It is a by-product of the restlet/equinox tutorial on http://blog.wolfgang-werne
 
 License
 -------
-
+t.b.d.
