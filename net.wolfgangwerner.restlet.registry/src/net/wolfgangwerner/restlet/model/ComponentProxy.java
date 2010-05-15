@@ -12,13 +12,11 @@ import org.restlet.Restlet;
 import org.restlet.Server;
 
 public class ComponentProxy extends IdentifiableRestletProxy {
-	private String name;
 	private List<ServerProxy> servers = new ArrayList<ServerProxy>();
 	private List<RouteProxy> routes = new ArrayList<RouteProxy>();
 
 	public void init(IConfigurationElement configElement) throws CoreException {
 		super.init(configElement);
-		name = configElement.getAttribute("name");
 
 		for (IConfigurationElement serverConfig : configElement
 				.getChildren("server")) {
@@ -55,10 +53,6 @@ public class ComponentProxy extends IdentifiableRestletProxy {
 		}
 
 		return component;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public List<ServerProxy> getServers() {

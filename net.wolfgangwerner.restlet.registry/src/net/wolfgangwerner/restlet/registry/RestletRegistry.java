@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import net.wolfgangwerner.restlet.model.ApplicationProxy;
 import net.wolfgangwerner.restlet.model.ComponentProxy;
@@ -20,6 +21,8 @@ import org.restlet.Restlet;
 import org.restlet.resource.ServerResource;
 
 public class RestletRegistry {
+	private static final Logger logger = Logger.getLogger(RestletRegistry.class
+			.getName());
 
 	static RestletRegistry instance = new RestletRegistry();
 
@@ -39,30 +42,35 @@ public class RestletRegistry {
 	}
 
 	public void readExtensionRegistry() throws InvalidRegistryObjectException,
-			ClassNotFoundException, CoreException, InstantiationException, IllegalAccessException {
+			ClassNotFoundException, CoreException, InstantiationException,
+			IllegalAccessException {
+		logger.info("Started reading extension information.");
 		readResources();
-		components = read("components",ComponentProxy.class);
-		applications= read("applications",ApplicationProxy.class);
-		routers= read("routers",RouterProxy.class);
+		components = read("components", ComponentProxy.class);
+		applications = read("applications", ApplicationProxy.class);
+		routers = read("routers", RouterProxy.class);
 
 		allRestlets.putAll(components);
 		allRestlets.putAll(applications);
 		allRestlets.putAll(routers);
 	}
 
-	private <T extends IdentifiableRestletProxy> Map<String, T> read(String extensionPointId, Class<T> proxyClass)
-			throws CoreException, InstantiationException, IllegalAccessException {
+	private <T extends IdentifiableRestletProxy> Map<String, T> read(
+			String extensionPointId, Class<T> proxyClass) throws CoreException,
+			InstantiationException, IllegalAccessException {
 		Map<String, T> result = new HashMap<String, T>();
 		IConfigurationElement[] contributions = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(Activator.PLUGIN_ID,
 						extensionPointId);
 
 		for (IConfigurationElement configElement : contributions) {
-			T proxy =  proxyClass.newInstance();
+			T proxy = proxyClass.newInstance();
 			proxy.init(configElement);
 			result.put(proxy.getId(), proxy);
 		}
-		
+
+		logger.info("Found " + result.size() + " contributions to "
+				+ Activator.PLUGIN_ID + "." + extensionPointId);
 		return result;
 	}
 
@@ -82,6 +90,9 @@ public class RestletRegistry {
 
 			resources.put(contribution.getAttribute("id"), resourceClass);
 		}
+
+		logger.info("Found " + resources.size() + " contributions to "
+				+ Activator.PLUGIN_ID + ".resources.");
 	}
 
 	public boolean isRestletId(String restletId) {
@@ -89,7 +100,7 @@ public class RestletRegistry {
 	}
 
 	public Restlet getRestlet(String restletId) {
-		assert(restletId != null);
+		assert (restletId != null);
 		return allRestlets.get(restletId).getRestlet();
 	}
 

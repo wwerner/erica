@@ -7,13 +7,11 @@ import org.restlet.Server;
 import org.restlet.data.Protocol;
 
 public class ServerProxy extends IdentifiableRestletProxy {
-	private String name;
 	private String protocol;
 	private int port;
 
 	public void init(IConfigurationElement configElement) throws CoreException {
 		super.init(configElement);
-		name = configElement.getAttribute("name");
 		protocol = configElement.getAttribute("protocol");
 		port = Integer.valueOf(configElement.getAttribute("port"));
 	}
@@ -21,10 +19,6 @@ public class ServerProxy extends IdentifiableRestletProxy {
 	@Override
 	public Restlet getRestlet() {
 		return new Server(Protocol.valueOf(protocol), port);
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public String getProtocol() {
