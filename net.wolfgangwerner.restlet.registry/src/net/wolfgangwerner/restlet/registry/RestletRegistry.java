@@ -7,7 +7,7 @@ import java.util.Map;
 
 import net.wolfgangwerner.restlet.model.ApplicationProxy;
 import net.wolfgangwerner.restlet.model.ComponentProxy;
-import net.wolfgangwerner.restlet.model.IdentifyableRestletProxy;
+import net.wolfgangwerner.restlet.model.IdentifiableRestletProxy;
 import net.wolfgangwerner.restlet.model.RouterProxy;
 
 import org.eclipse.core.runtime.CoreException;
@@ -23,11 +23,12 @@ public class RestletRegistry {
 
 	static RestletRegistry instance = new RestletRegistry();
 
-	private Map<String, ComponentProxy> components = new HashMap<String, ComponentProxy>();
+	private Map<String, ComponentProxy> components;
+	private Map<String, ApplicationProxy> applications;
+	private Map<String, RouterProxy> routers;
+
 	private Map<String, Class<ServerResource>> resources = new HashMap<String, Class<ServerResource>>();
-	private Map<String, ApplicationProxy> applications = new HashMap<String, ApplicationProxy>();
-	private Map<String, RouterProxy> routers = new HashMap<String, RouterProxy>();
-	private Map<String, IdentifyableRestletProxy> allRestlets = new HashMap<String, IdentifyableRestletProxy>();
+	private Map<String, IdentifiableRestletProxy> allRestlets = new HashMap<String, IdentifiableRestletProxy>();
 
 	private RestletRegistry() {
 		super();
@@ -38,39 +39,31 @@ public class RestletRegistry {
 	}
 
 	public void readExtensionRegistry() throws InvalidRegistryObjectException,
-			ClassNotFoundException, CoreException {
-		// TODO Build a generic registry. This is grossly redundant.
-
+			ClassNotFoundException, CoreException, InstantiationException, IllegalAccessException {
 		readResources();
-		readComponents();
-		readApplications();
-		readRouters();
+		components = read("components",ComponentProxy.class);
+		applications= read("applications",ApplicationProxy.class);
+		routers= read("routers",RouterProxy.class);
 
 		allRestlets.putAll(components);
 		allRestlets.putAll(applications);
 		allRestlets.putAll(routers);
 	}
 
-	private void readApplications() throws CoreException {
-		IConfigurationElement[] applicationContributions = Platform
-				.getExtensionRegistry().getConfigurationElementsFor(
-						Activator.PLUGIN_ID, "applications");
+	private <T extends IdentifiableRestletProxy> Map<String, T> read(String extensionPointId, Class<T> proxyClass)
+			throws CoreException, InstantiationException, IllegalAccessException {
+		Map<String, T> result = new HashMap<String, T>();
+		IConfigurationElement[] contributions = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(Activator.PLUGIN_ID,
+						extensionPointId);
 
-		for (IConfigurationElement configElement : applicationContributions) {
-			ApplicationProxy proxy = new ApplicationProxy(configElement);
-			applications.put(proxy.getId(), proxy);
+		for (IConfigurationElement configElement : contributions) {
+			T proxy =  proxyClass.newInstance();
+			proxy.init(configElement);
+			result.put(proxy.getId(), proxy);
 		}
-	}
-
-	private void readRouters() throws CoreException {
-		IConfigurationElement[] applicationContributions = Platform
-				.getExtensionRegistry().getConfigurationElementsFor(
-						Activator.PLUGIN_ID, "routers");
-
-		for (IConfigurationElement configElement : applicationContributions) {
-			RouterProxy proxy = new RouterProxy(configElement);
-			routers.put(proxy.getId(), proxy);
-		}
+		
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -91,22 +84,12 @@ public class RestletRegistry {
 		}
 	}
 
-	private void readComponents() {
-		IConfigurationElement[] componentContributions = Platform
-				.getExtensionRegistry().getConfigurationElementsFor(
-						Activator.PLUGIN_ID, "components");
-
-		for (IConfigurationElement configElement : componentContributions) {
-			ComponentProxy proxy = new ComponentProxy(configElement);
-			components.put(proxy.getId(), proxy);
-		}
-	}
-
 	public boolean isRestletId(String restletId) {
 		return allRestlets.containsKey(restletId);
 	}
 
 	public Restlet getRestlet(String restletId) {
+		assert(restletId != null);
 		return allRestlets.get(restletId).getRestlet();
 	}
 

@@ -80,7 +80,7 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="outboundRoot" type="string">
+         <attribute name="inboundRoot" type="string">
             <annotation>
                <documentation>
                   

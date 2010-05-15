@@ -5,16 +5,17 @@ import java.util.List;
 
 import net.wolfgangwerner.restlet.registry.RestletRegistry;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
-public class RouterProxy extends IdentifyableRestletProxy {
+public class RouterProxy extends IdentifiableRestletProxy {
 	private String name;
 	private List<RouteProxy> routes = new ArrayList<RouteProxy>();
 
-	public RouterProxy(IConfigurationElement configElement) {
-		super(configElement);
+	public void init (IConfigurationElement configElement) throws CoreException {
+		super.init(configElement);
 		id = configElement.getAttribute("id");
 		name = configElement.getAttribute("name");
 
@@ -39,11 +40,7 @@ public class RouterProxy extends IdentifyableRestletProxy {
 		
 		return router;
 	}
-
-	public String getId() {
-		return id;
-	}
-
+	
 	public String getName() {
 		return name;
 	}

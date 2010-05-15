@@ -10,10 +10,10 @@ import java.net.URLConnection;
 
 import org.junit.Test;
 
-public class RouterTest {
+public class ApplicationTest {
 	@Test
 	public void testFirstRouteOnFirstServer() throws IOException {
-		URLConnection conn = new URL("http://localhost:8182/router1/1/test1").openConnection();
+		URLConnection conn = new URL("http://localhost:8182/application1/1/test1").openConnection();
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn
 				.getInputStream()));
@@ -24,7 +24,7 @@ public class RouterTest {
 
 	@Test
 	public void testSecondRouteOnFirstServer() throws IOException {
-		URLConnection conn = new URL("http://localhost:8182/router1/2/test2").openConnection();
+		URLConnection conn = new URL("http://localhost:8182/application1/2/test2").openConnection();
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn
 				.getInputStream()));
@@ -35,7 +35,7 @@ public class RouterTest {
 	
 	@Test
 	public void testFirstRouteOnSecondServer() throws IOException {
-		URLConnection conn = new URL("http://localhost:8182/router1/1/test1").openConnection();
+		URLConnection conn = new URL("http://localhost:8182/application1/1/test1").openConnection();
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn
 				.getInputStream()));
@@ -46,7 +46,7 @@ public class RouterTest {
 
 	@Test
 	public void testSecondRouteOnSecondServer() throws IOException {
-		URLConnection conn = new URL("http://localhost:8182/router1/2/test2").openConnection();
+		URLConnection conn = new URL("http://localhost:8182/application1/2/test2").openConnection();
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn
 				.getInputStream()));

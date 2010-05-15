@@ -9,7 +9,7 @@
          <server
                id="server.1"
                name="HTTP"
-               port="80"
+               port="8182"
                protocol="http">
          </server>
          <server
@@ -24,7 +24,11 @@
          </route>
          <route
                targetId="router.1"
-               urlTemplate="/a">
+               urlTemplate="/router1">
+         </route>
+         <route
+               targetId="application.1"
+               urlTemplate="/application1">
          </route>
     </component>
    </extension>
@@ -55,5 +59,13 @@
                urlTemplate="/2/{param}">
          </route>
       </router>
+   </extension>
+   <extension
+         point="net.wolfgangwerner.restlet.registry.applications">
+      <application
+            id="application.1"
+            name="Application 1"
+            inboundRoot="router.1">
+      </application>
    </extension>
 </plugin>

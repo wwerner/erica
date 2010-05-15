@@ -13,7 +13,7 @@ import org.junit.Test;
 public class ComponentTest {
 	@Test
 	public void testHttpServer() throws IOException {
-		URLConnection conn = new URL("http://localhost:80/resource1").openConnection();
+		URLConnection conn = new URL("http://localhost:8182/resource1").openConnection();
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn
 				.getInputStream()));
