@@ -38,4 +38,11 @@ public class ApplicationTest {
 		assertEquals("resource 1", TestUtil
 				.getURL("http://localhost:8182/application2"));
 	}
+	
+	@Test
+	public void testApplicationWithClass() throws MalformedURLException,
+			IOException {
+		assertEquals("resource 1", TestUtil
+				.getURL("http://localhost:8182/application3/1"));
+	}
 }

@@ -34,6 +34,10 @@
                targetId="application.2"
                urlTemplate="/application2">
          </route>
+         <route
+               targetId="application.3"
+               urlTemplate="/application3">
+         </route>
     </component>
    </extension>
    <extension
@@ -75,6 +79,11 @@
             id="application.2"
             inboundRoot="r.1"
             name="Application 2">
+      </application>
+      <application
+            class="net.wolfgangwerner.restlet.registry.test.applications.TestApplication"
+            id="application.3"
+            name="Application 3">
       </application>
    </extension>
 </plugin>

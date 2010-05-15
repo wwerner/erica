@@ -25,6 +25,8 @@ public class ApplicationProxy extends IdentifiableRestletProxy {
 	public Restlet getRestlet() {
 		if (application == null)
 			application = new Application();
+		else
+			return application;
 
 		if (RestletRegistry.getInstance().isRestletId(inboundRootReference))
 			application.setInboundRoot(RestletRegistry.getInstance()

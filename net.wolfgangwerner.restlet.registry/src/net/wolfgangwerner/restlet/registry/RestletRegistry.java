@@ -46,18 +46,20 @@ public class RestletRegistry {
 			IllegalAccessException {
 		logger.info("Started reading extension information.");
 		readResources();
-		components = read("components", ComponentProxy.class);
-		applications = read("applications", ApplicationProxy.class);
-		routers = read("routers", RouterProxy.class);
+		components = readRestlets("components", ComponentProxy.class);
+		applications = readRestlets("applications", ApplicationProxy.class);
+		routers = readRestlets("routers", RouterProxy.class);
 
 		allRestlets.putAll(components);
 		allRestlets.putAll(applications);
 		allRestlets.putAll(routers);
 	}
 
-	private <T extends IdentifiableRestletProxy> Map<String, T> read(
+	private <T extends IdentifiableRestletProxy> Map<String, T> readRestlets(
 			String extensionPointId, Class<T> proxyClass) throws CoreException,
 			InstantiationException, IllegalAccessException {
+		logger.info("Evaluating extentsion point " + Activator.PLUGIN_ID + "."
+				+ extensionPointId);
 		Map<String, T> result = new HashMap<String, T>();
 		IConfigurationElement[] contributions = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(Activator.PLUGIN_ID,
@@ -66,6 +68,8 @@ public class RestletRegistry {
 		for (IConfigurationElement configElement : contributions) {
 			T proxy = proxyClass.newInstance();
 			proxy.init(configElement);
+			logger.info("Adding " + proxy.getName() + " with id "
+					+ proxy.getId());
 			result.put(proxy.getId(), proxy);
 		}
 
@@ -77,6 +81,9 @@ public class RestletRegistry {
 	@SuppressWarnings("unchecked")
 	private void readResources() throws InvalidRegistryObjectException,
 			ClassNotFoundException, CoreException {
+		logger.info("Evaluating extentsion point " + Activator.PLUGIN_ID + "."
+				+ "resources");
+
 		IConfigurationElement[] contributions = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(Activator.PLUGIN_ID, "resources");
 
@@ -88,6 +95,8 @@ public class RestletRegistry {
 			resourceClass = (Class<ServerResource>) contributingBundle
 					.loadClass(contribution.getAttribute("class"));
 
+			logger.info("Adding " + contribution.getAttribute("class")
+					+ " with id " + contribution.getAttribute("id"));
 			resources.put(contribution.getAttribute("id"), resourceClass);
 		}
 
