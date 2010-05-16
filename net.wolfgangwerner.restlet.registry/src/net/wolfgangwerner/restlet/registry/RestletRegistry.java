@@ -27,8 +27,6 @@ public class RestletRegistry {
 	static RestletRegistry instance = new RestletRegistry();
 
 	private Map<String, ComponentProxy> components;
-	private Map<String, ApplicationProxy> applications;
-	private Map<String, RouterProxy> routers;
 
 	private Map<String, Class<ServerResource>> resources = new HashMap<String, Class<ServerResource>>();
 	private Map<String, IdentifiableRestletProxy> allRestlets = new HashMap<String, IdentifiableRestletProxy>();
@@ -47,12 +45,8 @@ public class RestletRegistry {
 		logger.info("Started reading extension information.");
 		readResources();
 		components = readRestlets("components", ComponentProxy.class);
-		applications = readRestlets("applications", ApplicationProxy.class);
-		routers = readRestlets("routers", RouterProxy.class);
-
-		allRestlets.putAll(components);
-		allRestlets.putAll(applications);
-		allRestlets.putAll(routers);
+		readRestlets("applications", ApplicationProxy.class);
+		readRestlets("routers", RouterProxy.class);
 	}
 
 	private <T extends IdentifiableRestletProxy> Map<String, T> readRestlets(
@@ -68,9 +62,9 @@ public class RestletRegistry {
 		for (IConfigurationElement configElement : contributions) {
 			T proxy = proxyClass.newInstance();
 			proxy.init(configElement);
-			logger.info("Adding " + proxy.getName() + " with id "
-					+ proxy.getId());
+			logger.info("Adding restlet " + proxy);
 			result.put(proxy.getId(), proxy);
+			allRestlets.put(proxy.getId(), proxy);
 		}
 
 		logger.info("Found " + result.size() + " contributions to "
@@ -89,15 +83,21 @@ public class RestletRegistry {
 
 		Bundle contributingBundle;
 		Class<ServerResource> resourceClass;
+		String name;
+		String id;
+		String clazz;
 		for (IConfigurationElement contribution : contributions) {
+			id = contribution.getAttribute("id");
+			name = contribution.getAttribute("name");
+			clazz = contribution.getAttribute("class");
+
 			contributingBundle = Platform.getBundle(contribution
 					.getContributor().getName());
 			resourceClass = (Class<ServerResource>) contributingBundle
-					.loadClass(contribution.getAttribute("class"));
+					.loadClass(clazz);
 
-			logger.info("Adding " + contribution.getAttribute("class")
-					+ " with id " + contribution.getAttribute("id"));
-			resources.put(contribution.getAttribute("id"), resourceClass);
+			logger.info("Adding resource '" + name + "' (" + id + ")");
+			resources.put(id, resourceClass);
 		}
 
 		logger.info("Found " + resources.size() + " contributions to "
@@ -110,7 +110,7 @@ public class RestletRegistry {
 
 	public Restlet getRestlet(String restletId) {
 		assert (restletId != null);
-		return allRestlets.get(restletId).getRestlet();
+		return allRestlets.get(restletId).createRestlet();
 	}
 
 	public Class<ServerResource> getResource(String resourceId) {
@@ -120,7 +120,7 @@ public class RestletRegistry {
 	public List<Component> getComponents() {
 		List<Component> result = new ArrayList<Component>();
 		for (ComponentProxy proxy : components.values()) {
-			result.add((Component) proxy.getRestlet());
+			result.add((Component) proxy.createRestlet());
 		}
 		return result;
 	}
