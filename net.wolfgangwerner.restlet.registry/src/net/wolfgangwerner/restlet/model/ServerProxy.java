@@ -17,7 +17,7 @@ public class ServerProxy extends IdentifiableRestletProxy {
 	}
 
 	@Override
-	public Restlet getRestlet() {
+	public Restlet createRestlet() {
 		return new Server(Protocol.valueOf(protocol), port);
 	}
 

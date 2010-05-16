@@ -32,11 +32,11 @@ public class ComponentProxy extends IdentifiableRestletProxy {
 	}
 
 	@Override
-	public Restlet getRestlet() {
+	public Restlet createRestlet() {
 		Component component = new Component();
 
 		for (ServerProxy serverProxy : servers) {
-			component.getServers().add((Server) serverProxy.getRestlet());
+			component.getServers().add((Server) serverProxy.createRestlet());
 		}
 
 		for (RouteProxy route : routes) {

@@ -23,7 +23,7 @@ public class RouterProxy extends IdentifiableRestletProxy {
 	}
 	
 	@Override
-	public Restlet getRestlet() {
+	public Restlet createRestlet() {
 		Router router = new Router();
 
 		for (RouteProxy route : routes) {

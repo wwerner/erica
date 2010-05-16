@@ -22,7 +22,7 @@ public class ApplicationProxy extends IdentifiableRestletProxy {
 	}
 
 	@Override
-	public Restlet getRestlet() {
+	public Restlet createRestlet() {
 		if (application == null)
 			application = new Application();
 		else
