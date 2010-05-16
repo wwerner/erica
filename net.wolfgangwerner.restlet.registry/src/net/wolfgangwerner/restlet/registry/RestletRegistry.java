@@ -72,7 +72,6 @@ public class RestletRegistry {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void readResources() throws InvalidRegistryObjectException,
 			ClassNotFoundException, CoreException {
 		logger.info("Evaluating extentsion point " + Activator.PLUGIN_ID + "."
@@ -81,27 +80,33 @@ public class RestletRegistry {
 		IConfigurationElement[] contributions = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(Activator.PLUGIN_ID, "resources");
 
+		for (IConfigurationElement contribution : contributions) {
+			readResource(contribution);
+		}
+
+		logger.info("Found " + resources.size() + " contributions to "
+				+ Activator.PLUGIN_ID + ".resources.");
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readResource(IConfigurationElement contribution)
+			throws ClassNotFoundException {
 		Bundle contributingBundle;
 		Class<ServerResource> resourceClass;
 		String name;
 		String id;
 		String clazz;
-		for (IConfigurationElement contribution : contributions) {
-			id = contribution.getAttribute("id");
-			name = contribution.getAttribute("name");
-			clazz = contribution.getAttribute("class");
+		id = contribution.getAttribute("id");
+		name = contribution.getAttribute("name");
+		clazz = contribution.getAttribute("class");
 
-			contributingBundle = Platform.getBundle(contribution
-					.getContributor().getName());
-			resourceClass = (Class<ServerResource>) contributingBundle
-					.loadClass(clazz);
+		contributingBundle = Platform.getBundle(contribution.getContributor()
+				.getName());
+		resourceClass = (Class<ServerResource>) contributingBundle
+				.loadClass(clazz);
 
-			logger.info("Adding resource '" + name + "' (" + id + ")");
-			resources.put(id, resourceClass);
-		}
-
-		logger.info("Found " + resources.size() + " contributions to "
-				+ Activator.PLUGIN_ID + ".resources.");
+		logger.info("Adding resource '" + name + "' (" + id + ")");
+		resources.put(id, resourceClass);
 	}
 
 	public boolean isRestletId(String restletId) {
