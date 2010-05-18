@@ -8,4 +8,4 @@ It is a by-product of the restlet/equinox tutorial on http://blog.wolfgang-werne
 
 License
 -------
-t.b.d.
+erica is licensed under the [Eclipse Public License v1.0](http://www.eclipse.org/legal/epl-v10.html).
