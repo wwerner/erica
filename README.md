@@ -1,3 +1,7 @@
+THIS PROJECT IS OBSOLETE.
+If you are interested in using Restlet with OSGi services and/or Eclipse extension points, please refer to http://eclipselabs.org/p/restlet-integration-with-equinox/
+
+
 
 erica: Equinox/Restlet Integration - Component Assembly
 =======================================================
